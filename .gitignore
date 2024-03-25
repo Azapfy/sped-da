@@ -21,6 +21,9 @@ src/NFe/Bloco/Itens.php
 src/NFe/Bloco/Informacoes.php
 src/NFe/Bloco/Rodape.php
 tests/fixtures/pdf/*
+conf
+docker-compose.yml
+docker_images
 
 .phpunit.result.cache
 .DS_Store
