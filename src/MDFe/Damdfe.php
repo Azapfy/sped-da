@@ -1083,32 +1083,61 @@ class Damdfe extends DaCommon
                 }
             }
 
+            // Loop para as chaves CTe
             for ($i = 0; $i < $chavesCTe->length; $i++) {
                 $y += 4;
                 $texto = $chavesCTe->item($i)->nodeValue;
                 $aFont = array('font' => $this->fontePadrao, 'size' => 8, 'style' => '');
-                $this->pdf->textBox($x1, $y, 70, 8, $texto, $aFont, 'T', 'L', 0, '', false);
+                $this->pdf->textBox($x1, $y, 65, 8, $texto, $aFont, 'T', 'L', true, '', true, 0, 0, false);
                 $contadorChaves++;
                 if ($this->orientacao == 'P') {
-                    if ($contadorChaves > 25) {
-                        break;
+                    // Se tiver mais de 25 chaves, pule para a próxima página
+                    if ($contadorChaves > $limiteChDfePaginaRetrato) {
+                        $y = $posicaoVerticalInicial;
+                        $x1 += 65;
+                        $contadorChaves = 0;
                     }
-                } elseif ($contadorChaves > 16) {
-                    break;
+                    // Se a largura atual for maior que 195 mm, pule para a próxima página
+                    if ($x1 > 195) {
+                        $this->pdf->addPage($this->orientacao);
+                        $x1 = 7;
+                        $y = 10;
+                        $posicaoVerticalInicial = $y;
+                        $limiteChDfePaginaRetrato = $limiteChDfeOutrasPaginasRetrato;
+                    }
+                } elseif ($contadorChaves > $limiteChDfePaginaPaisagem) {
+                    $y = $posicaoVerticalInicial;
+                    $x1 += 65;
+                    $contadorChaves = 0;
                 }
             }
+
+            // Loop para as chaves MDFe
             for ($i = 0; $i < $chavesMDFe->length; $i++) {
                 $y += 4;
                 $texto = $chavesMDFe->item($i)->nodeValue;
                 $aFont = array('font' => $this->fontePadrao, 'size' => 8, 'style' => '');
-                $this->pdf->textBox($x1, $y, 70, 8, $texto, $aFont, 'T', 'L', 0, '', false);
+                $this->pdf->textBox($x1, $y, 65, 8, $texto, $aFont, 'T', 'L', true, '', true, 0, 0, false);
                 $contadorChaves++;
                 if ($this->orientacao == 'P') {
-                    if ($contadorChaves > 25) {
-                        break;
+                    // Se tiver mais de 25 chaves, pule para a próxima página
+                    if ($contadorChaves > $limiteChDfePaginaRetrato) {
+                        $y = $posicaoVerticalInicial;
+                        $x1 += 65;
+                        $contadorChaves = 0;
                     }
-                } elseif ($contadorChaves > 16) {
-                    break;
+                    // Se a largura atual for maior que 195 mm, pule para a próxima página
+                    if ($x1 > 195) {
+                        $this->pdf->addPage($this->orientacao);
+                        $x1 = 7;
+                        $y = 10;
+                        $posicaoVerticalInicial = $y;
+                        $limiteChDfePaginaRetrato = $limiteChDfeOutrasPaginasRetrato;
+                    }
+                } elseif ($contadorChaves > $limiteChDfePaginaPaisagem) {
+                    $y = $posicaoVerticalInicial;
+                    $x1 += 65;
+                    $contadorChaves = 0;
                 }
             }
         }
