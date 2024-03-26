@@ -916,6 +916,9 @@ class Damdfe extends DaCommon
                     $this->pdf->textBox($x1, $altura, $x2, 10, $texto, $aFont, 'T', 'L', 0, '', false);
                 }
             }
+            /**
+             * Vale Pedágio
+             */
             $x1 = $x;
             $y += 22;
             if ($this->orientacao == 'P') {
@@ -979,6 +982,11 @@ class Damdfe extends DaCommon
             if (!$temVales) {
                 $altura += 4;
             }
+            $alturaFinalPedagio = $altura;
+
+            /**
+             * Condutor
+             */
             $this->condutor = $this->veicTracao->getElementsByTagName('condutor');
             $x1 = round($maxW / 2, 0) + 7;
             $y = $yold;
@@ -1018,35 +1026,63 @@ class Damdfe extends DaCommon
                 $aFont = array('font' => $this->fontePadrao, 'size' => 8, 'style' => '');
                 $this->pdf->textBox($x1, $y, $x2 - 1, 8, $texto, $aFont, 'T', 'L', 0, '', false);
             }
-            $x1 = round($maxW / 2, 0) + 7;
+
+            /**
+             * Chaves Documentos Fiscais
+             */
+            $limiteChDfePrimeiraPaginaRetrato = 25;
+            $limiteChDfePrimeiraPaginaPaisagem = 16;
+
+            $limiteChDfeOutrasPaginasRetrato = 59;
+
+            $limiteChDfePaginaPaisagem = $limiteChDfePrimeiraPaginaPaisagem;
+            $limiteChDfePaginaRetrato = $limiteChDfePrimeiraPaginaRetrato;
+
+            $x1 =  7;
             $x2 = ($maxW / 6);
-            $y = $yCabecalhoLinha;
+            $y = $alturaFinalPedagio + 4;
             if ($this->orientacao == 'L') {
                 $x1 = 225;
                 $y = $yold - 5;
             }
             $texto = 'Chaves de acesso';
             $aFont = array('font' => $this->fontePadrao, 'size' => 8, 'style' => '');
-            $this->pdf->textBox($x1, $y, $x2, 8, $texto, $aFont, 'T', 'L', 0, '', false);
+            $this->pdf->textBox($x1, $y, $x2 * 2, 8, $texto, $aFont, 'T', 'L', 0, '', false);
             $y = $y + 2;
             $chavesNFe = $this->dom->getElementsByTagName('infDoc')->item(0)->getElementsByTagName('chNFe');
             $chavesCTe = $this->dom->getElementsByTagName('infDoc')->item(0)->getElementsByTagName('chCTe');
             $chavesMDFe = $this->dom->getElementsByTagName('infDoc')->item(0)->getElementsByTagName('chMDFe');
             $contadorChaves = 0;
+            $posicaoVerticalInicial = $y;
             for ($i = 0; $i < $chavesNFe->length; $i++) {
                 $y += 4;
                 $texto = $chavesNFe->item($i)->nodeValue;
                 $aFont = array('font' => $this->fontePadrao, 'size' => 8, 'style' => '');
-                $this->pdf->textBox($x1, $y, 70, 8, $texto, $aFont, 'T', 'L', 0, '', false);
+                $this->pdf->textBox($x1, $y, 65, 8, $texto, $aFont, 'T', 'L', true, '', true, 0, 0, false);
                 $contadorChaves++;
                 if ($this->orientacao == 'P') {
-                    if ($contadorChaves > 25) {
-                        break;
+                    // Se tiver mais de 25 chaves, pule pra próxima página
+                    if ($contadorChaves > $limiteChDfePaginaRetrato) {
+                        $y = $posicaoVerticalInicial;
+                        $x1 += 65;
+                        $contadorChaves = 0;
                     }
-                } elseif ($contadorChaves > 16) {
-                    break;
+                    // Se a largura atual for maior que 195 mm, pule pra próxima página
+                    if($x1 > 195){
+                        $this->pdf->addPage($this->orientacao);
+                        $x1 = 7;
+                        $y = 10;
+                        $posicaoVerticalInicial = $y;
+                        $limiteChDfePaginaRetrato = $limiteChDfeOutrasPaginasRetrato;
+
+                    }
+                } elseif ($contadorChaves > $limiteChDfePaginaPaisagem) {
+                    $y = $posicaoVerticalInicial;
+                    $x1 += 65;
+                    $contadorChaves = 0;
                 }
             }
+
             for ($i = 0; $i < $chavesCTe->length; $i++) {
                 $y += 4;
                 $texto = $chavesCTe->item($i)->nodeValue;
