@@ -1034,6 +1034,7 @@ class Damdfe extends DaCommon
             $limiteChDfePrimeiraPaginaPaisagem = 16;
 
             $limiteChDfeOutrasPaginasRetrato = 59;
+            $limiteChDfeOutrasPaginasPaisagem = 39;
 
             $limiteChDfePaginaPaisagem = $limiteChDfePrimeiraPaginaPaisagem;
             $limiteChDfePaginaRetrato = $limiteChDfePrimeiraPaginaRetrato;
@@ -1060,8 +1061,9 @@ class Damdfe extends DaCommon
                 $aFont = array('font' => $this->fontePadrao, 'size' => 8, 'style' => '');
                 $this->pdf->textBox($x1, $y, 65, 8, $texto, $aFont, 'T', 'L', true, '', true, 0, 0, false);
                 $contadorChaves++;
+                //Retrato
                 if ($this->orientacao == 'P') {
-                    // Se tiver mais de 25 chaves, pule pra próxima página
+                    // Se tiver mais de 25 chaves, pule pra próxima coluna
                     if ($contadorChaves > $limiteChDfePaginaRetrato) {
                         $y = $posicaoVerticalInicial;
                         $x1 += 65;
@@ -1076,10 +1078,23 @@ class Damdfe extends DaCommon
                         $limiteChDfePaginaRetrato = $limiteChDfeOutrasPaginasRetrato;
 
                     }
-                } elseif ($contadorChaves > $limiteChDfePaginaPaisagem) {
-                    $y = $posicaoVerticalInicial;
-                    $x1 += 65;
-                    $contadorChaves = 0;
+                //Paisagem
+                } else{
+                    if($contadorChaves > $limiteChDfePaginaPaisagem){
+                        $x1 += 65;
+                        $y = 10;
+                        $contadorChaves = 0;
+                    }
+
+                    //Se a largura atual for maior que 280 mm, pule para a próxima página
+                    if($x1 > 250){
+                        $this->pdf->addPage($this->orientacao);
+                        $x1 = 7;
+                        $y = 10;
+                        //Caso já tenha passado da primeira página, altera o limite de chaves por página
+                        $limiteChDfePaginaPaisagem = $limiteChDfeOutrasPaginasPaisagem;
+                    }
+
                 }
             }
 
@@ -1105,10 +1120,21 @@ class Damdfe extends DaCommon
                         $posicaoVerticalInicial = $y;
                         $limiteChDfePaginaRetrato = $limiteChDfeOutrasPaginasRetrato;
                     }
-                } elseif ($contadorChaves > $limiteChDfePaginaPaisagem) {
-                    $y = $posicaoVerticalInicial;
-                    $x1 += 65;
-                    $contadorChaves = 0;
+                } else{
+                    // Se tiver mais chaves do que o limite por página em paisagem, pule para a próxima coluna
+                    if ($contadorChaves > $limiteChDfePaginaPaisagem) {
+                        $x1 += 65;
+                        $y = 10;
+                        $contadorChaves = 0;
+                    }
+                    // Se a largura atual for maior que 280 mm, pule para a próxima página
+                    if ($x1 > 250) {
+                        $this->pdf->addPage($this->orientacao);
+                        $x1 = 7;
+                        $y = 10;
+                        // Caso já tenha passado da primeira página, altera o limite de chaves por página
+                        $limiteChDfePaginaPaisagem = $limiteChDfeOutrasPaginasPaisagem;
+                    }
                 }
             }
 
@@ -1134,10 +1160,21 @@ class Damdfe extends DaCommon
                         $posicaoVerticalInicial = $y;
                         $limiteChDfePaginaRetrato = $limiteChDfeOutrasPaginasRetrato;
                     }
-                } elseif ($contadorChaves > $limiteChDfePaginaPaisagem) {
-                    $y = $posicaoVerticalInicial;
-                    $x1 += 65;
-                    $contadorChaves = 0;
+                } else{
+                    // Se tiver mais chaves do que o limite por página em paisagem, pule para a próxima coluna
+                    if ($contadorChaves > $limiteChDfePaginaPaisagem) {
+                        $x1 += 65;
+                        $y = 10;
+                        $contadorChaves = 0;
+                    }
+                    // Se a largura atual for maior que 280 mm, pule para a próxima página
+                    if ($x1 > 250) {
+                        $this->pdf->addPage($this->orientacao);
+                        $x1 = 7;
+                        $y = 10;
+                        // Caso já tenha passado da primeira página, altera o limite de chaves por página
+                        $limiteChDfePaginaPaisagem = $limiteChDfeOutrasPaginasPaisagem;
+                    }
                 }
             }
         }
