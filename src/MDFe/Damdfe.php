@@ -1030,7 +1030,7 @@ class Damdfe extends DaCommon
             /**
              * Chaves Documentos Fiscais
              */
-            $limiteChDfePrimeiraPaginaRetrato = 25;
+            $limiteChDfePrimeiraPaginaRetrato = 21;
             $limiteChDfePrimeiraPaginaPaisagem = 16;
 
             $limiteChDfeOutrasPaginasRetrato = 59;
@@ -1106,7 +1106,7 @@ class Damdfe extends DaCommon
                 $this->pdf->textBox($x1, $y, 65, 8, $texto, $aFont, 'T', 'L', true, '', true, 0, 0, false);
                 $contadorChaves++;
                 if ($this->orientacao == 'P') {
-                    // Se tiver mais de 25 chaves, pule para a próxima página
+                    // Se tiver mais de 25 chaves, pule para a próxima coluna
                     if ($contadorChaves > $limiteChDfePaginaRetrato) {
                         $y = $posicaoVerticalInicial;
                         $x1 += 65;
@@ -1146,7 +1146,7 @@ class Damdfe extends DaCommon
                 $this->pdf->textBox($x1, $y, 65, 8, $texto, $aFont, 'T', 'L', true, '', true, 0, 0, false);
                 $contadorChaves++;
                 if ($this->orientacao == 'P') {
-                    // Se tiver mais de 25 chaves, pule para a próxima página
+                    // Se tiver mais de 25 chaves, pule para a próxima coluna
                     if ($contadorChaves > $limiteChDfePaginaRetrato) {
                         $y = $posicaoVerticalInicial;
                         $x1 += 65;
