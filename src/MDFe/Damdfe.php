@@ -1030,8 +1030,9 @@ class Damdfe extends DaCommon
             /**
              * Chaves Documentos Fiscais
              */
+            $primeiraPagina = true;
             $limiteChDfePrimeiraPaginaRetrato = 21;
-            $limiteChDfePrimeiraPaginaPaisagem = 16;
+            $limiteChDfePrimeiraPaginaPaisagem = 12;
 
             $limiteChDfeOutrasPaginasRetrato = 59;
             $limiteChDfeOutrasPaginasPaisagem = 39;
@@ -1042,10 +1043,6 @@ class Damdfe extends DaCommon
             $x1 =  7;
             $x2 = ($maxW / 6);
             $y = $alturaFinalPedagio + 4;
-            if ($this->orientacao == 'L') {
-                $x1 = 225;
-                $y = $yold - 5;
-            }
             $texto = 'Chaves de acesso';
             $aFont = array('font' => $this->fontePadrao, 'size' => 8, 'style' => '');
             $this->pdf->textBox($x1, $y, $x2 * 2, 8, $texto, $aFont, 'T', 'L', 0, '', false);
@@ -1080,21 +1077,25 @@ class Damdfe extends DaCommon
                     }
                 //Paisagem
                 } else{
-                    if($contadorChaves > $limiteChDfePaginaPaisagem){
+                    // Se tiver mais chaves do que o limite por página em paisagem, pule para a próxima coluna
+                    if ($contadorChaves > $limiteChDfePaginaPaisagem) {
                         $x1 += 65;
-                        $y = 10;
+                        if($primeiraPagina){
+                            $y = $alturaFinalPedagio + 6;
+                        }else{
+                            $y = 10;
+                        }
                         $contadorChaves = 0;
                     }
-
-                    //Se a largura atual for maior que 280 mm, pule para a próxima página
-                    if($x1 > 250){
+                    // Se a largura atual for maior que 280 mm, pule para a próxima página
+                    if ($x1 > 250) {
                         $this->pdf->addPage($this->orientacao);
+                        $primeiraPagina = false;
                         $x1 = 7;
                         $y = 10;
-                        //Caso já tenha passado da primeira página, altera o limite de chaves por página
+                        // Caso já tenha passado da primeira página, altera o limite de chaves por página
                         $limiteChDfePaginaPaisagem = $limiteChDfeOutrasPaginasPaisagem;
                     }
-
                 }
             }
 
@@ -1124,12 +1125,17 @@ class Damdfe extends DaCommon
                     // Se tiver mais chaves do que o limite por página em paisagem, pule para a próxima coluna
                     if ($contadorChaves > $limiteChDfePaginaPaisagem) {
                         $x1 += 65;
-                        $y = 10;
+                        if($primeiraPagina){
+                            $y = $alturaFinalPedagio + 6;
+                        }else{
+                            $y = 10;
+                        }
                         $contadorChaves = 0;
                     }
                     // Se a largura atual for maior que 280 mm, pule para a próxima página
                     if ($x1 > 250) {
                         $this->pdf->addPage($this->orientacao);
+                        $primeiraPagina = false;
                         $x1 = 7;
                         $y = 10;
                         // Caso já tenha passado da primeira página, altera o limite de chaves por página
@@ -1164,12 +1170,17 @@ class Damdfe extends DaCommon
                     // Se tiver mais chaves do que o limite por página em paisagem, pule para a próxima coluna
                     if ($contadorChaves > $limiteChDfePaginaPaisagem) {
                         $x1 += 65;
-                        $y = 10;
+                        if($primeiraPagina){
+                            $y = $alturaFinalPedagio + 6;
+                        }else{
+                            $y = 10;
+                        }
                         $contadorChaves = 0;
                     }
                     // Se a largura atual for maior que 280 mm, pule para a próxima página
                     if ($x1 > 250) {
                         $this->pdf->addPage($this->orientacao);
+                        $primeiraPagina = false;
                         $x1 = 7;
                         $y = 10;
                         // Caso já tenha passado da primeira página, altera o limite de chaves por página

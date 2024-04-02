@@ -7,6 +7,7 @@ build
 src/NFe/Blocks
 src/NFe/DanfeNew.php
 examples/nfe/danfenew.php
+examples/mdfe/*
 composer.lock
 config.json
 src/NFe/Danfe2.php
